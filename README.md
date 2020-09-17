@@ -1,2 +1,1 @@
-# Android
-Android Mini Projects Portfolio.
+# Android Mini Projects Portfolio.
