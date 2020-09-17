@@ -1,2 +1,1 @@
-# Android
-Android Mini Projects Portfolio.
+## Restful with Retrofit and Reativex in MVVM.
