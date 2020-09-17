@@ -1,1 +1,0 @@
-## Restful with Retrofit and Reactx in MVVM
