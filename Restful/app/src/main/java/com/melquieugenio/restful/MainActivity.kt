@@ -1,68 +1,68 @@
 package com.melquieugenio.restful
 
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
-
 
 class MainActivity : AppCompatActivity() {
 
-    private var user: String = "klauswuestefeld"
-    private var composite = CompositeDisposable()
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this).get(MainViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+        initObservers()
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.github.com/")
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-
-        val service: RestService = retrofit.create(RestService::class.java)
-
-        val repos: Observable<List<Repo>?> = service.listRepos(user)
-
-        composite.add(
-            (repos.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::handleResults, this::handleError))
-        )
     }
 
-    private fun handleResults(repoList: List<Repo>?) {
+    private fun initObservers() {
+        viewModel.getRepoList("luiz-matias").observe(this, {
+            Log.d("MainActivity", "Repositories list updated!")
+            handleResults(it!!)
+        })
+
+        viewModel.state.observe(this, {
+            when (it) {
+                is MainActivityState.OnLoaded -> {
+                    recyclerView.visibility = View.VISIBLE
+                    progressBarLoading.visibility = View.GONE
+                }
+                is MainActivityState.OnLoading -> {
+                    recyclerView.visibility = View.GONE
+                    progressBarLoading.visibility = View.VISIBLE
+                }
+                is MainActivityState.OnError -> {
+                    Log.d("MainActivity", "Error ${it.error}!")
+                    handleError(it.error)
+                    recyclerView.visibility = View.GONE
+                    progressBarLoading.visibility = View.GONE
+                }
+            }
+        })
+    }
+
+    private fun handleResults(list: List<Repo>) {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = MyAdapter(repoList!!, this@MainActivity)
+            adapter = MyAdapter(list, this@MainActivity) {
+                Toast.makeText(context, "Clicked.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     private fun handleError(t: Throwable) {
         Toast.makeText(
-            this, "ERROR IN FETCHING API RESPONSE. Try again",
+            this, "ERROR IN FETCHING API RESPONSE: ${t.message}. Try again",
             Toast.LENGTH_LONG
         ).show()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        composite.clear()
-    }
 }

@@ -4,11 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.row.view.*
 
-class MyAdapter(private val dataSet: List<Repo>, private val context: Context) :
+class MyAdapter(private val dataSet: List<Repo>, private val context: Context, private val onRepoClick: View.OnClickListener) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -48,7 +47,7 @@ class MyAdapter(private val dataSet: List<Repo>, private val context: Context) :
 
         // On repo click
         holder.itemView.setOnClickListener {
-            Toast.makeText(context, "Clicked.", Toast.LENGTH_SHORT).show()
+            onRepoClick.onClick(it)
         }
     }
 
