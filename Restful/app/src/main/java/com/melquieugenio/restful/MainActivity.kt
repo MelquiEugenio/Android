@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
-    private var user: String = "MelquiEugenio"
+    private var user: String = "klauswuestefeld"
     private var composite = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,24 +45,6 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResults, this::handleError))
         )
-
-        /*repos.enqueue(object : Callback<List<Repo>?> {
-
-            override fun onResponse(
-                call: Call<List<Repo>?>,
-                response: Response<List<Repo>?>
-            ) {
-
-            }
-
-            override fun onFailure(call: Call<List<Repo>?>, t: Throwable) {
-                Toast.makeText(
-                    this@MainActivity,
-                    "Something went wrong...Please try later!",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        })*/
     }
 
     private fun handleResults(repoList: List<Repo>?) {
