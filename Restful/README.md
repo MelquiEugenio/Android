@@ -1,1 +1,1 @@
-## Restful from Github API with Retrofit and Reactivex in MVVM showing on a RecyclerView.
+## Restful from Github API with Retrofit, Reactivex and LiveData in MVVM showing on a RecyclerView.
