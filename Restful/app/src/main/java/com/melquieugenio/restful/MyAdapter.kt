@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.row.view.*
 
-class MyAdapter(private val dataSet: List<Repo>, private val context: Context, private val onRepoClick: View.OnClickListener) :
+class MyAdapter(private val dataSet: List<Repo>, private val onRepoClick: View.OnClickListener) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
