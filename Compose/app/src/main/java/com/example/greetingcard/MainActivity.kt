@@ -48,12 +48,15 @@ fun Greeting(from: String) {
             modifier = Modifier.fillMaxSize(),
             painter = painterResource(id = R.drawable.androidparty),
             contentDescription = null,
-            contentScale = ContentScale.FillWidth,
+            contentScale = ContentScale.Crop,
             alpha = 0.5F,
         )
         LazyColumn(contentPadding = PaddingValues(top = 50.dp)) {
             items(4) { _ ->
-                Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Text(
                         text = "Happy coding!",
                         textAlign = TextAlign.Center,
