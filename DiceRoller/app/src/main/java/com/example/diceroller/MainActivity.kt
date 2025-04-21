@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeContentPadding
@@ -51,10 +53,17 @@ fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
     }
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
+            modifier = Modifier.clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = { result = (1..4).random() },
+            ),
             painter = painterResource(imageResource),
             contentDescription = "Dice 1"
         )
-        Button(onClick = { result = (1..4).random() }) {
+        Button(
+            onClick = { result = (1..4).random() }
+        ) {
             Text("Roll")
         }
     }
