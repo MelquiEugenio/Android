@@ -9,12 +9,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -32,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.customtip.ui.theme.CustomTipTheme
 import kotlin.math.ceil
-import kotlin.math.floor
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,27 +77,25 @@ fun TipScreen(modifier: Modifier = Modifier) {
         )
         Spacer(modifier = Modifier.height(height = 30.dp))
         RoundUpTipRow(
-            billAmount,
-            checked = checked,
-            tip = tip,
-            onValueChange = { newChecked1, newTip ->
+            billAmount, checked = checked, onValueChange = { newChecked1, newTip ->
                 checked = newChecked1; tip = newTip
-            }
-        )
+            })
         Spacer(modifier = Modifier.height(height = 50.dp))
         Text(text = "Tip Amount: $${String.format("%.2f", tip)}", fontSize = 30.sp)
     }
 }
 
 @Composable
-fun RoundUpTipRow(billAmount: String, checked: Boolean, tip: Double, onValueChange: (Boolean, Double) -> Unit) {
+fun RoundUpTipRow(
+    billAmount: String, checked: Boolean, onValueChange: (Boolean, Double) -> Unit
+) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text("Round up Tip?")
         Spacer(modifier = Modifier.width(width = 30.dp))
         Switch(
             checked = checked,
             onCheckedChange = {
-                onValueChange(!checked, getTip(billAmount, 0.15, !checked) )
+                onValueChange(!checked, getTip(billAmount, 0.15, !checked))
             },
         )
     }
